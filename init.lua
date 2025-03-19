@@ -155,6 +155,15 @@ vim.opt.scrolloff = 10
 -- See `:help 'confirm'`
 vim.opt.confirm = true
 
+-- Don't wrap lines
+vim.opt.wrap = false
+
+-- Use syntax highlighting for hex editing
+vim.opt.ft = 'xxd'
+
+-- Set the width of tabs
+vim.opt.tabstop = 4
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -188,6 +197,14 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+-- Keybind the function keys for some general purposes
+vim.keymap.set('n', '<F1>', '<cmd>term<cr>', {})
+vim.keymap.set('n', '<F2>', '<cmd>NERDTreeToggle<cr>', { noremap = true })
+vim.keymap.set('n', '<F5>', '<cmd>%!xxd<cr>', { noremap = true })
+vim.keymap.set('n', '<C-F5>', '<cmd>%!xxd -r<cr>', { noremap = true })
+vim.keymap.set('n', '<F8>', '<cmd>tabnew<cr>', { noremap = true })
+vim.keymap.set('n', '<F9>', '<cmd>tabclose<cr>', { noremap = true })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -199,6 +216,16 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
     vim.highlight.on_yank()
+  end,
+})
+
+-- Remember the cursor location when reopening a file
+vim.api.nvim_create_autocmd('BufReadPost', {
+  pattern = { '*' },
+  callback = function()
+    if vim.fn.line '\'"' > 1 and vim.fn.line '\'"' <= vim.fn.line '$' then
+      vim.api.nvim_exec2('normal! g\'"', { output = false })
+    end
   end,
 })
 
@@ -233,15 +260,10 @@ require('lazy').setup({
   'norcalli/nvim-colorizer.lua',
   'aklt/plantuml-syntax',
   'arecarn/vim-crunch',
+  'scrooloose/nerdtree',
 
   { -- vim-go LSP
     'fatih/vim-go',
-    enabled = true,
-    --keys = {
-    --  { '<leader>b', '<cmd>GoBuild<CR>', mode = 'n' },
-    --  { '<leader>i', '<cmd>GoInstall<CR>', mode = 'n' },
-    --  { '<leader>r', '<cmd>GoRun<CR>', mode = 'n' },
-    --},
     vim.keymap.set('n', '<leader>b', '<cmd>GoBuild<CR>'),
     vim.keymap.set('n', '<leader>i', '<cmd>GoInstall<CR>'),
     vim.keymap.set('n', '<leader>r', '<cmd>GoRun<CR>'),
@@ -928,7 +950,23 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = {
+        'bash',
+        'c',
+        'cpp',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        'go',
+        'python',
+        'json',
+      },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -939,6 +977,11 @@ require('lazy').setup({
         additional_vim_regex_highlighting = { 'ruby' },
       },
       indent = { enable = true, disable = { 'ruby' } },
+      -- Use Treesitter to get the highligh group under the cursor
+      vim.keymap.set('n', '<F10>', function()
+        local result = vim.treesitter.get_captures_at_cursor(0)
+        print(vim.inspect(result))
+      end, { noremap = true, silent = false }),
     },
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
