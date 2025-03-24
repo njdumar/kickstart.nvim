@@ -235,27 +235,6 @@ require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
-  { -- vim-go LSP
-    'fatih/vim-go',
-    vim.keymap.set('n', '<leader>b', '<cmd>GoBuild<CR>'),
-    vim.keymap.set('n', '<leader>i', '<cmd>GoInstall<CR>'),
-    vim.keymap.set('n', '<leader>r', '<cmd>GoRun<CR>'),
-    opts = {
-      go_fmt_autosave = 1,
-      go_imports_autosave = 0,
-      go_term_mode = 'split',
-      go_term_enabled = 1,
-
-      go_highlight_fields = 1,
-      go_highlight_functions = 1,
-      go_highlight_function_calls = 1,
-      go_highlight_extra_types = 1,
-      go_highlight_operators = 1,
-      go_highlight_types = 1,
-    },
-    config = function() end,
-  },
-
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
   -- keys can be used to configure plugin behavior/loading/etc.
@@ -685,11 +664,16 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
+        bashls = {},
         clangd = {},
+        dockerls = {},
         -- gopls = {},
+        jsonls = {},
+        powershell_es = {},
         pyright = {},
         ruff = {},
-        -- rust_analyzer = {},
+        rust_analyzer = {},
+        sqls = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -713,6 +697,7 @@ require('lazy').setup({
             },
           },
         },
+        yamlls = {},
       }
 
       -- Ensure the servers and tools above are installed
