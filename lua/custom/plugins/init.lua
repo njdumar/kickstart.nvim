@@ -105,4 +105,9 @@ return {
       wrapper_symbol_kinds = { SymbolKind.Class, SymbolKind.Struct },
     },
   },
+  {
+    'chentoast/marks.nvim',
+    event = 'VeryLazy',
+    opts = {},
+  },
 }
