@@ -14,7 +14,7 @@ vim.opt.tabstop = 4
 --vim.opt.expandtab = true
 --
 
-vim.keymap.set('n', '<F1>', '<cmd>term<cr>', {})
+vim.keymap.set('n', '<F1>', '<cmd>STerm<cr>', {})
 vim.keymap.set('n', '<F2>', '<cmd>NERDTreeToggle<cr>', { noremap = true })
 vim.keymap.set('n', '<F5>', '<cmd>%!xxd<cr>', { noremap = true })
 vim.keymap.set('n', '<C-F5>', '<cmd>%!xxd -r<cr>', { noremap = true })
@@ -40,6 +40,7 @@ return {
   'aklt/plantuml-syntax',
   'arecarn/vim-crunch',
   'scrooloose/nerdtree',
+  'rednaks/vim-split-term',
   'tomtom/tcomment_vim',
 
   { -- catppuccin colorscheme
